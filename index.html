@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geleiras em Risco - Impacto na Biodiversidade</title>
+    <style>
+        /* Estilos Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: #f0f8ff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        section {
+            padding: 60px 0;
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 20px;
+            color: #1a5276;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #2980b9;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #1a5276;
+        }
+        
+        /* Header e Navegação */
+        header {
+            background-color: rgba(26, 82, 118, 0.9);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #aed6f1;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://source.unsplash.com/1600x900/?glacier') no-repeat center center/cover;
+            color: white;
+            display: flex;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+        
+        /* Seções de Conteúdo */
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: #2980b9;
+            margin: 10px auto;
+        }
+        
+        /* Sobre */
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        
+        .about-text {
+            flex: 1;
+        }
+        
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Causas */
+        .causes {
+            background-color: #e8f4fc;
+        }
+        
+        .causes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .cause-card {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .cause-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .cause-card h3 {
+            color: #2980b9;
+            margin-bottom: 15px;
+        }
+        
+        /* Impactos */
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .impact-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .impact-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .impact-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .impact-card:hover .impact-image img {
+            transform: scale(1.05);
+        }
+        
+        .impact-content {
+            padding: 20px;
+        }
+        
+        /* Soluções */
+        .solutions {
+            background-color: #e8f4fc;
+        }
+        
+        .solutions-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .solution-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Galeria */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .gallery-item {
+            height: 250px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        /* Equipe */
+        .team {
+            background-color: #1a5276;
+            color: white;
+        }
+        
+        .team .section-title {
+            color: white;
+        }
+        
+        .team .section-title::after {
+            background: #aed6f1;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .team-member {
+            text-align: center;
+        }
+        
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 5px solid #aed6f1;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #1a5276;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: #aed6f1;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header com Navegação -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">Geleiras em Risco</div>
+                <ul class="nav-links">
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#causas">Causas</a></li>
+                    <li><a href="#impactos">Impactos</a></li>
+                    <li><a href="#solucoes">Soluções</a></li>
+                    <li><a href="#equipe">Equipe</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Derretimento das Geleiras: Impacto na Biodiversidade</h1>
+                <p>Um alerta sobre como o desaparecimento das massas de gelo afeta a vida em nosso planeta</p>
+                <a href="#sobre" class="btn">Saiba Mais</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="about">
+        <div class="container">
+            <h2 class="section-title">O Problema do Derretimento</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>As geleiras são massas de gelo que se formaram ao longo de milhares de anos e desempenham um papel crucial na regulação do clima global e na manutenção dos ecossistemas. Nos últimos decades, temos observado um acelerado derretimento dessas importantes reservas de água doce.</p>
+                    <p>Este fenômeno não é apenas um indicador das mudanças climáticas, mas também uma ameaça direta à biodiversidade do planeta. Espécies que dependem desses habitats estão enfrentando desafios sem precedentes para sua sobrevivência.</p>
+                    <p>Nesta apresentação, exploraremos as causas, consequências e possíveis soluções para este problema crítico que afeta todo o ecossistema terrestre.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://source.unsplash.com/600x400/?glacier-melting" alt="Geleira derretendo">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Causas -->
+    <section id="causas" class="causes">
+        <div class="container">
+            <h2 class="section-title">Principais Causas</h2>
+            <div class="causes-grid">
+                <div class="cause-card">
+                    <h3>Aquecimento Global</h3>
+                    <p>O aumento da temperatura média do planeta, impulsionado pela concentração de gases de efeito estufa na atmosfera, é a principal causa do derretimento acelerado das geleiras.</p>
+                </div>
+                <div class="cause-card">
+                    <h3>Poluição Atmosférica</h3>
+                    <p>Partículas de poluentes depositadas sobre as superfícies geladas reduzem a capacidade de reflexão da luz solar, acelerando o processo de derretimento.</p>
+                </div>
+                <div class="cause-card">
+                    <h3>Mudanças nas Correntes Oceânicas</h3>
+                    <p>Alterações nos padrões de circulação oceânica levam águas mais quentes para regiões polares, contribuindo para a erosão das geleiras a partir de sua base.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impactos -->
+    <section id="impactos" class="impacts">
+        <div class="container">
+            <h2 class="section-title">Impactos na Biodiversidade</h2>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-image">
+                        <img src="https://source.unsplash.com/400x300/?polar-bear" alt="Urso polar">
+                    </div>
+                    <div class="impact-content">
+                        <h3>Espécies Polares Ameaçadas</h3>
+                        <p>Animais como ursos polares, focas e pinguins perdem seus habitats e fontes de alimento com o desaparecimento do gelo marinho.</p>
+                    </div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-image">
+                        <img src="https://source.unsplash.com/400x300/?ocean-rising" alt="Aumento do nível do mar">
+                    </div>
+                    <div class="impact-content">
+                        <h3>Elevação do Nível do Mar</h3>
+                        <p>O derretimento contribui para a elevação dos oceanos, ameaçando ecossistemas costeiros e comunidades humanas.</p>
+                    </div>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-image">
+                        <img src="https://source.unsplash.com/400x300/?algae-bloom" alt="Floração de algas">
+                    </div>
+                    <div class="impact-content">
+                        <h3>Alterações nas Correntes Marinhas</h3>
+                        <p>A água doce proveniente do derretimento altera a salinidade e a temperatura dos oceanos, afetando ecossistemas marinhos.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Soluções -->
+    <section id="solucoes" class="solutions">
+        <div class="container">
+            <h2 class="section-title">Possíveis Soluções</h2>
+            <div class="solutions-content">
+                <div class="solution-item">
+                    <h3>Redução de Emissões</h3>
+                    <p>Diminuir drasticamente a queima de combustíveis fósseis e investir em energias renováveis é fundamental para frear o aquecimento global.</p>
+                </div>
+                <div class="solution-item">
+                    <h3>Conservação de Ecossistemas</h3>
+                    <p>Proteger áreas naturais e criar corredores ecológicos ajuda espécies a se adaptarem às mudanças em seus habitats.</p>
+                </div>
+                <div class="solution-item">
+                    <h3>Políticas Públicas</h3>
+                    <p>Governos devem implementar políticas ambientais rigorosas e acordos internacionais para enfrentar o problema globalmente.</p>
+                </div>
+                <div class="solution-item">
+                    <h3>Conscientização e Educação</h3>
+                    <p>Informar a população sobre a gravidade do problema é essencial para promover mudanças de comportamento e pressionar por ações.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria -->
+    <section class="gallery">
+        <div class="container">
+            <h2 class="section-title">Registros do Derretimento</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://source.unsplash.com/300x300/?glacier-comparison" alt="Comparação de geleiras">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://source.unsplash.com/300x300/?arctic-wildlife" alt="Vida selvagem no Ártico">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://source.unsplash.com/300x300/?iceberg" alt="Iceberg">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://source.unsplash.com/300x300/?glacier-crack" alt="Rachadura em geleira">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipe -->
+    <section id="equipe" class="team">
+        <div class="container">
+            <h2 class="section-title">Nossa Equipe</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <img src="https://source.unsplash.com/150x150/?student-1" alt="Membro da equipe">
+                    <h3>Ana Silva</h3>
+                    <p>Pesquisadora Principal</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://source.unsplash.com/150x150/?student-2" alt="Membro da equipe">
+                    <h3>Carlos Oliveira</h3>
+                    <p>Analista de Dados</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://source.unsplash.com/150x150/?student-3" alt="Membro da equipe">
+                    <h3>Mariana Santos</h3>
+                    <p>Especialista em Biodiversidade</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://source.unsplash.com/150x150/?student-4" alt="Membro da equipe">
+                    <h3>Pedro Almeida</h3>
+                    <p>Comunicação e Design</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <h3>Geleiras em Risco - Impacto na Biodiversidade</h3>
+                <p>Trabalho de apresentação do 2º ano do Ensino Médio</p>
+                <ul class="footer-links">
+                    <li><a href="#inicio">Início</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#causas">Causas</a></li>
+                    <li><a href="#impactos">Impactos</a></li>
+                    <li><a href="#solucoes">Soluções</a></li>
+                    <li><a href="#equipe">Equipe</a></li>
+                </ul>
+                <p>© 2023 - Todos os direitos reservados</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
