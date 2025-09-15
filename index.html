@@ -1,1240 +1,1370 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geleiras em Risco - Impacto na Biodiversidade</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            background-color: #f0f8ff;
-            color: #333;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        section {
-            padding: 60px 0;
-        }
-        
-        h1, h2, h3 {
-            margin-bottom: 20px;
-            color: #1a5276;
-        }
-        
-        p {
-            margin-bottom: 15px;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: #2980b9;
-            color: white;
-            padding: 12px 25px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            transform: translateY(0);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn:hover {
-            background-color: #1a5276;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        header {
-            background-color: rgba(26, 82, 118, 0.9);
-            color: white;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        header.scrolled {
-            padding: 5px 0;
-            background-color: rgba(26, 82, 118, 0.98);
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-        }
-        
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo i {
-            margin-right: 10px;
-            font-size: 1.8rem;
-        }
-        
-        .nav-links {
-            display: flex;
-            list-style: none;
-        }
-        
-        .nav-links li {
-            margin-left: 25px;
-            position: relative;
-        }
-        
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            transition: color 0.3s;
-            padding: 5px 0;
-        }
-        
-        .nav-links a:hover {
-            color: #aed6f1;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: #aed6f1;
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        .hero {
-            position: relative;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-        }
-        
-        .hero video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            min-width: 100%;
-            min-height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-        
-        .hero-content {
-            position: relative;
-            max-width: 800px;
-            margin: 0 auto;
-            color: white;
-            z-index: 1;
-            animation: fadeIn 1.5s ease-out;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        .hero::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-        }
-        
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 80px;
-            height: 4px;
-            background: #2980b9;
-            margin: 10px auto;
-        }
-        
-        /* Sobre */
-        .about-content {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
-        
-        .about-text {
-            flex: 1;
-        }
-        
-        .about-image {
-            flex: 1;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-        
-        .about-image:hover {
-            transform: scale(1.03);
-        }
-        
-        .about-image img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        
-        /* Causas */
-        .causes {
-            background-color: #e8f4fc;
-        }
-        
-        .causes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .cause-card {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cause-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 5px;
-            height: 0;
-            background: #2980b9;
-            transition: height 0.3s ease;
-        }
-        
-        .cause-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .cause-card:hover::before {
-            height: 100%;
-        }
-        
-        .cause-card h3 {
-            color: #2980b9;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .cause-card h3 i {
-            margin-right: 10px;
-        }
-        
-        /* Gráfico de comparação */
-        .chart-container {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin: 40px auto;
-            max-width: 800px;
-        }
-        
-        .chart-title {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #1a5276;
-        }
-        
-        /* Impactos */
-        .impact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        
-        .impact-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .impact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .impact-image {
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .impact-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        
-        .impact-card:hover .impact-image img {
-            transform: scale(1.05);
-        }
-        
-        .impact-content {
-            padding: 20px;
-        }
-        
-        /* Soluções */
-        .solutions {
-            background-color: #e8f4fc;
-        }
-        
-        .solutions-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .solution-item {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: flex-start;
-        }
-        
-        .solution-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-        }
-        
-        .solution-icon {
-            font-size: 24px;
-            color: #2980b9;
-            margin-right: 15px;
-            flex-shrink: 0;
-        }
-        
-        /* Abas de Notícias e Vídeos */
-        .news-section {
-            background-color: #e8f4fc;
-            padding: 60px 0;
-        }
-        
-        .tabs-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .tabs-header {
-            display: flex;
-            background: #1a5276;
-        }
-        
-        .tab-btn {
-            flex: 1;
-            padding: 15px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-        
-        .tab-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .tab-btn.active {
-            background: #2980b9;
-        }
-        
-        .tab-content {
-            display: none;
-            padding: 30px;
-        }
-        
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .news-card {
-            background: #f9f9f9;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-        
-        .news-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .news-image {
-            height: 160px;
-            overflow: hidden;
-        }
-        
-        .news-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .news-content {
-            padding: 15px;
-        }
-        
-        .news-date {
-            color: #2980b9;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
-        
-        .news-title {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: #1a5276;
-        }
-        
-        .news-excerpt {
-            font-size: 0.95rem;
-            color: #555;
-        }
-        
-        .videos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        
-        .video-card {
-            background: #f9f9f9;
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-        }
-        
-        .video-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .video-thumbnail {
-            position: relative;
-            height: 180px;
-            overflow: hidden;
-        }
-        
-        .video-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .play-btn {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.7);
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            transition: all 0.3s ease;
-        }
-        
-        .video-card:hover .play-btn {
-            background: rgba(41, 128, 185, 0.9);
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-        
-        .video-content {
-            padding: 15px;
-        }
-        
-        .video-title {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: #1a5276;
-        }
-        
-        .video-desc {
-            font-size: 0.95rem;
-            color: #555;
-        }
-        
-        /* Galeria */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        
-        .gallery-item {
-            height: 250px;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-        }
-        
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s;
-        }
-        
-        .gallery-item:hover img {
-            transform: scale(1.1);
-        }
-        
-        .gallery-item::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .gallery-item:hover::after {
-            opacity: 1;
-        }
-        
-        /* Equipe */
-        .team {
-            background-color: #1a5276;
-            color: white;
-        }
-        
-        .team .section-title {
-            color: white;
-        }
-        
-        .team .section-title::after {
-            background: #aed6f1;
-        }
-        
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-        }
-        
-        .team-member {
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        
-        .team-member:hover {
-            transform: translateY(-10px);
-        }
-        
-        .team-member img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 15px;
-            border: 5px solid #aed6f1;
-            transition: all 0.3s ease;
-        }
-        
-        .team-member:hover img {
-            border-color: #ffffff;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
-        }
-        
-        .social-links a {
-            color: #aed6f1;
-            font-size: 1.2rem;
-            transition: color 0.3s ease;
-        }
-        
-        .social-links a:hover {
-            color: white;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: #1a5276;
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-        }
-        
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: 20px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .footer-links a {
-            color: #aed6f1;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        
-        .footer-links a:hover {
-            color: white;
-            text-decoration: underline;
-        }
-        
-        .footer-social {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 20px 0;
-        }
-        
-        .footer-social a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .footer-social a:hover {
-            background: #aed6f1;
-            color: #1a5276;
-            transform: translateY(-3px);
-        }
-        
-        .back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 50px;
-            height: 50px;
-            background: #2980b9;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            font-size: 1.5rem;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-        }
-        
-        .back-to-top.visible {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .back-to-top:hover {
-            background: #1a5276;
-            transform: translateY(-5px);
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @media (max-width: 768px) {
-            .about-content {
-                flex-direction: column;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .tabs-header {
-                flex-direction: column;
-            }
-            
-            .solution-item {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .solution-icon {
-                margin-right: 0;
-                margin-bottom: 10px;
-            }
-        }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Geleiras em Risco - Impacto na Biodiversidade</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ }
+ 
+ html {
+ scroll-behavior: smooth;
+ }
+ 
+ body {
+ background-color: #f0f8ff;
+ color: #333;
+ line-height: 1.6;
+ overflow-x: hidden;
+ }
+ 
+ .container {
+ width: 90%;
+ max-width: 1200px;
+ margin: 0 auto;
+ padding: 0 20px;
+ }
+ 
+ section {
+ padding: 60px 0;
+ }
+ 
+ h1, h2, h3 {
+ margin-bottom: 20px;
+ color: #1a5276;
+ }
+ 
+ p {
+ margin-bottom: 15px;
+ }
+ 
+ .btn {
+ display: inline-block;
+ background-color: #2980b9;
+ color: white;
+ padding: 12px 25px;
+ border-radius: 5px;
+ text-decoration: none;
+ font-weight: bold;
+ transition: all 0.3s ease;
+ transform: translateY(0);
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .btn:hover {
+ background-color: #1a5276;
+ transform: translateY(-3px);
+ box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+ }
+ 
+ .btn-secondary {
+ background-color: transparent;
+ border: 2px solid white;
+ margin-left: 15px;
+ }
+ 
+ .btn-secondary:hover {
+ background-color: rgba(255, 255, 255, 0.2);
+ }
+ 
+ .btn-invite {
+ background-color: #e74c3c;
+ animation: pulse 2s infinite;
+ }
+ 
+ .btn-invite:hover {
+ background-color: #c0392b;
+ }
+ 
+ .btn-nasa {
+ background-color: #0b3d91;
+ }
+ 
+ .btn-nasa:hover {
+ background-color: #082567;
+ }
+ 
+ @keyframes pulse {
+ 0% { transform: scale(1); }
+ 50% { transform: scale(1.05); }
+ 100% { transform: scale(1); }
+ }
+ 
+ header {
+ background-color: rgba(26, 82, 118, 0.9);
+ color: white;
+ position: fixed;
+ width: 100%;
+ top: 0;
+ z-index: 1000;
+ box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+ transition: all 0.3s ease;
+ }
+ 
+ header.scrolled {
+ padding: 5px 0;
+ background-color: rgba(26, 82, 118, 0.98);
+ }
+ 
+ nav {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 15px 0;
+ }
+ 
+ .logo {
+ font-size: 1.5rem;
+ font-weight: bold;
+ display: flex;
+ align-items: center;
+ }
+ 
+ .logo i {
+ margin-right: 10px;
+ font-size: 1.8rem;
+ }
+ 
+ .nav-links {
+ display: flex;
+ list-style: none;
+ }
+ 
+ .nav-links li {
+ margin-left: 25px;
+ position: relative;
+ }
+ 
+ .nav-links a {
+ color: white;
+ text-decoration: none;
+ transition: color 0.3s;
+ padding: 5px 0;
+ }
+ 
+ .nav-links a:hover {
+ color: #aed6f1;
+ }
+ 
+ .nav-links a::after {
+ content: '';
+ position: absolute;
+ width: 0;
+ height: 2px;
+ bottom: 0;
+ left: 0;
+ background-color: #aed6f1;
+ transition: width 0.3s ease;
+ }
+ 
+ .nav-links a:hover::after {
+ width: 100%;
+ }
+ 
+ .hero {
+ position: relative;
+ height: 100vh;
+ display: flex;
+ align-items: center;
+ text-align: center;
+ overflow: hidden;
+ }
+ 
+ .hero video {
+ position: absolute;
+ top: 0;
+ left: 0;
+ min-width: 100%;
+ min-height: 100%;
+ object-fit: cover;
+ z-index: -1;
+ }
+ 
+ .hero-content {
+ position: relative;
+ max-width: 800px;
+ margin: 0 auto;
+ color: white;
+ z-index: 1;
+ animation: fadeIn 1.5s ease-out;
+ }
+ 
+ .hero h1 {
+ font-size: 3rem;
+ margin-bottom: 20px;
+ color: white;
+ text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+ }
+ 
+ .hero p {
+ font-size: 1.2rem;
+ margin-bottom: 30px;
+ text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+ }
+ 
+ .invite-container {
+ background: rgba(255, 255, 255, 0.15);
+ backdrop-filter: blur(10px);
+ border-radius: 15px;
+ padding: 25px;
+ margin: 30px 0;
+ border: 1px solid rgba(255, 255, 255, 0.2);
+ box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .invite-title {
+ font-size: 1.8rem;
+ margin-bottom: 15px;
+ color: #fff;
+ text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+ }
+ 
+ .invite-text {
+ font-size: 1.1rem;
+ margin-bottom: 20px;
+ line-height: 1.5;
+ }
+ 
+ .btn-group {
+ display: flex;
+ justify-content: center;
+ gap: 15px;
+ flex-wrap: wrap;
+ }
+ 
+ .hero::after {
+ content: "";
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0, 0, 0, 0.45);
+ z-index: 0;
+ }
+ 
+ .section-title {
+ text-align: center;
+ margin-bottom: 40px;
+ position: relative;
+ }
+ 
+ .section-title::after {
+ content: '';
+ display: block;
+ width: 80px;
+ height: 4px;
+ background: #2980b9;
+ margin: 10px auto;
+ }
+ 
+ /* Sobre */
+ .about-content {
+ display: flex;
+ align-items: center;
+ gap: 40px;
+ }
+ 
+ .about-text {
+ flex: 1;
+ }
+ 
+ .about-image {
+ flex: 1;
+ border-radius: 10px;
+ overflow: hidden;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+ transition: transform 0.3s ease;
+ }
+ 
+ .about-image:hover {
+ transform: scale(1.03);
+ }
+ 
+ .about-image img {
+ width: 100%;
+ height: auto;
+ display: block;
+ }
+ 
+ /* Causas */
+ .causes {
+ background-color: #e8f4fc;
+ }
+ 
+ .causes-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: 30px;
+ }
+ 
+ .cause-card {
+ background: white;
+ padding: 25px;
+ border-radius: 8px;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+ transition: all 0.3s ease;
+ position: relative;
+ overflow: hidden;
+ }
+ 
+ .cause-card::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 5px;
+ height: 0;
+ background: #2980b9;
+ transition: height 0.3s ease;
+ }
+ 
+ .cause-card:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .cause-card:hover::before {
+ height: 100%;
+ }
+ 
+ .cause-card h3 {
+ color: #2980b9;
+ margin-bottom: 15px;
+ display: flex;
+ align-items: center;
+ }
+ 
+ .cause-card h3 i {
+ margin-right: 10px;
+ }
+ 
+ /* Gráfico de comparação */
+ .chart-container {
+ background: white;
+ padding: 25px;
+ border-radius: 10px;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+ margin: 40px auto;
+ max-width: 800px;
+ }
+ 
+ .chart-title {
+ text-align: center;
+ margin-bottom: 20px;
+ color: #1a5276;
+ }
+ 
+ /* Impactos */
+ .impact-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: 30px;
+ }
+ 
+ .impact-card {
+ background: white;
+ border-radius: 8px;
+ overflow: hidden;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+ transition: all 0.3s ease;
+ }
+ 
+ .impact-card:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .impact-image {
+ height: 200px;
+ overflow: hidden;
+ position: relative;
+ }
+ 
+ .impact-image img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ transition: transform 0.5s;
+ }
+ 
+ .impact-card:hover .impact-image img {
+ transform: scale(1.05);
+ }
+ 
+ .impact-content {
+ padding: 20px;
+ }
+ 
+ /* Soluções */
+ .solutions {
+ background-color: #e8f4fc;
+ }
+ 
+ .solutions-content {
+ display: flex;
+ flex-direction: column;
+ gap: 20px;
+ }
+ 
+ .solution-item {
+ background: white;
+ padding: 20px;
+ border-radius: 8px;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+ transition: all 0.3s ease;
+ display: flex;
+ align-items: flex-start;
+ }
+ 
+ .solution-item:hover {
+ transform: translateX(5px);
+ box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+ }
+ 
+ .solution-icon {
+ font-size: 24px;
+ color: #2980b9;
+ margin-right: 15px;
+ flex-shrink: 0;
+ }
+ 
+ /* NASA Section */
+ .nasa-section {
+ background: linear-gradient(135deg, #0b3d91 0%, #1a5276 100%);
+ color: white;
+ text-align: center;
+ }
+ 
+ .nasa-content {
+ max-width: 800px;
+ margin: 0 auto;
+ }
+ 
+ .nasa-logo {
+ font-size: 3rem;
+ margin-bottom: 20px;
+ color: #fc3d21;
+ }
+ 
+ /* Abas de Notícias e Vídeos */
+ .news-section {
+ background-color: #e8f4fc;
+ padding: 60px 0;
+ }
+ 
+ .tabs-container {
+ max-width: 1000px;
+ margin: 0 auto;
+ background: white;
+ border-radius: 10px;
+ overflow: hidden;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+ }
+ 
+ .tabs-header {
+ display: flex;
+ background: #1a5276;
+ }
+ 
+ .tab-btn {
+ flex: 1;
+ padding: 15px;
+ background: none;
+ border: none;
+ color: white;
+ font-size: 1.1rem;
+ font-weight: bold;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 10px;
+ }
+ 
+ .tab-btn:hover {
+ background: rgba(255, 255, 255, 0.1);
+ }
+ 
+ .tab-btn.active {
+ background: #2980b9;
+ }
+ 
+ .tab-content {
+ display: none;
+ padding: 30px;
+ }
+ 
+ .tab-content.active {
+ display: block;
+ animation: fadeIn 0.5s ease;
+ }
+ 
+ .news-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: 20px;
+ }
+ 
+ .news-card {
+ background: #f9f9f9;
+ border-radius: 8px;
+ overflow: hidden;
+ transition: transform 0.3s ease;
+ }
+ 
+ .news-card:hover {
+ transform: translateY(-5px);
+ }
+ 
+ .news-image {
+ height: 160px;
+ overflow: hidden;
+ }
+ 
+ .news-image img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ }
+ 
+ .news-content {
+ padding: 15px;
+ }
+ 
+ .news-date {
+ color: #2980b9;
+ font-size: 0.9rem;
+ margin-bottom: 5px;
+ }
+ 
+ .news-title {
+ font-size: 1.1rem;
+ margin-bottom: 10px;
+ color: #1a5276;
+ }
+ 
+ .news-excerpt {
+ font-size: 0.95rem;
+ color: #555;
+ }
+ 
+ .videos-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: 20px;
+ }
+ 
+ .video-card {
+ background: #f9f9f9;
+ border-radius: 8px;
+ overflow: hidden;
+ transition: transform 0.3s ease;
+ }
+ 
+ .video-card:hover {
+ transform: translateY(-5px);
+ }
+ 
+ .video-thumbnail {
+ position: relative;
+ height: 180px;
+ overflow: hidden;
+ }
+ 
+ .video-thumbnail img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ }
+ 
+ .play-btn {
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background: rgba(0, 0, 0, 0.7);
+ width: 60px;
+ height: 60px;
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: white;
+ font-size: 1.5rem;
+ transition: all 0.3s ease;
+ }
+ 
+ .video-card:hover .play-btn {
+ background: rgba(41, 128, 185, 0.9);
+ transform: translate(-50%, -50%) scale(1.1);
+ }
+ 
+ .video-content {
+ padding: 15px;
+ }
+ 
+ .video-title {
+ font-size: 1.1rem;
+ margin-bottom: 10px;
+ color: #1a5276;
+ }
+ 
+ .video-desc {
+ font-size: 0.95rem;
+ color: #555;
+ }
+ 
+ /* Galeria */
+ .gallery-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 15px;
+ }
+ 
+ .gallery-item {
+ height: 250px;
+ border-radius: 8px;
+ overflow: hidden;
+ position: relative;
+ cursor: pointer;
+ }
+ 
+ .gallery-item img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ transition: transform 0.5s;
+ }
+ 
+ .gallery-item:hover img {
+ transform: scale(1.1);
+ }
+ 
+ .gallery-item::after {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0, 0, 0, 0.3);
+ opacity: 0;
+ transition: opacity 0.3s ease;
+ }
+ 
+ .gallery-item:hover::after {
+ opacity: 1;
+ }
+ 
+ /* Equipe */
+ .team {
+ background-color: #1a5276;
+ color: white;
+ }
+ 
+ .team .section-title {
+ color: white;
+ }
+ 
+ .team .section-title::after {
+ background: #aed6f1;
+ }
+ 
+ .team-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 30px;
+ }
+ 
+ .team-member {
+ text-align: center;
+ transition: transform 0.3s ease;
+ }
+ 
+ .team-member:hover {
+ transform: translateY(-10px);
+ }
+ 
+ .team-member img {
+ width: 150px;
+ height: 150px;
+ border-radius: 50%;
+ object-fit: cover;
+ margin-bottom: 15px;
+ border: 5px solid #aed6f1;
+ transition: all 0.3s ease;
+ }
+ 
+ .team-member:hover img {
+ border-color: #ffffff;
+ box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+ }
+ 
+ /* Convite para a sala */
+ .classroom-invite {
+ background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+ color: white;
+ text-align: center;
+ padding: 80px 0;
+ }
+ 
+ .classroom-invite .section-title {
+ color: white;
+ }
+ 
+ .classroom-invite .section-title::after {
+ background: #aed6f1;
+ }
+ 
+ .invite-content {
+ max-width: 800px;
+ margin: 0 auto;
+ padding: 30px;
+ background: rgba(255, 255, 255, 0.1);
+ border-radius: 15px;
+ backdrop-filter: blur(10px);
+ border: 1px solid rgba(255, 255, 255, 0.2);
+ }
+ 
+ .invite-details {
+ display: flex;
+ justify-content: center;
+ gap: 30px;
+ margin: 30px 0;
+ flex-wrap: wrap;
+ }
+ 
+ .invite-detail {
+ background: rgba(255, 255, 255, 0.15);
+ padding: 20px;
+ border-radius: 10px;
+ min-width: 200px;
+ backdrop-filter: blur(5px);
+ border: 1px solid rgba(255, 255, 255, 0.1);
+ }
+ 
+ .invite-detail i {
+ font-size: 2rem;
+ margin-bottom: 15px;
+ color: #aed6f1;
+ }
+ 
+ /* Footer */
+ footer {
+ background-color: #1a5276;
+ color: white;
+ padding: 40px 0;
+ text-align: center;
+ }
+ 
+ .footer-content {
+ display: flex;
+ flex-direction: column;
+ gap: 20px;
+ }
+ 
+ .footer-links {
+ display: flex;
+ justify-content: center;
+ list-style: none;
+ gap: 20px;
+ margin-bottom: 20px;
+ flex-wrap: wrap;
+ }
+ 
+ .footer-links a {
+ color: #aed6f1;
+ text-decoration: none;
+ transition: color 0.3s ease;
+ }
+ 
+ .footer-links a:hover {
+ color: white;
+ text-decoration: underline;
+ }
+ 
+ .back-to-top {
+ position: fixed;
+ bottom: 30px;
+ right: 30px;
+ width: 50px;
+ height: 50px;
+ background: #2980b9;
+ color: white;
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ text-decoration: none;
+ font-size: 1.5rem;
+ box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+ transition: all 0.3s ease;
+ z-index: 100;
+ opacity: 0;
+ visibility: hidden;
+ }
+ 
+ .back-to-top.visible {
+ opacity: 1;
+ visibility: visible;
+ }
+ 
+ .back-to-top:hover {
+ background: #1a5276;
+ transform: translateY(-5px);
+ }
+ 
+ @keyframes fadeIn {
+ from { opacity: 0; transform: translateY(20px); }
+ to { opacity: 1; transform: translateY(0); }
+ }
+ 
+ @media (max-width: 768px) {
+ .about-content {
+ flex-direction: column;
+ }
+ 
+ .nav-links {
+ display: none;
+ }
+ 
+ .hero h1 {
+ font-size: 2.2rem;
+ }
+ 
+ .tabs-header {
+ flex-direction: column;
+ }
+ 
+ .solution-item {
+ flex-direction: column;
+ text-align: center;
+ }
+ 
+ .solution-icon {
+ margin-right: 0;
+ margin-bottom: 10px;
+ }
+ 
+ .btn-group {
+ flex-direction: column;
+ align-items: center;
+ }
+ 
+ .btn-secondary {
+ margin-left: 0;
+ margin-top: 10px;
+ }
+ 
+ .invite-details {
+ flex-direction: column;
+ align-items: center;
+ }
+ }
+ </style>
 </head>
 <body>
-    <a href="#inicio" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
-    
-    <header id="header">
-        <div class="container">
-            <nav>
-                <div class="logo"><i class="fas fa-mountain"></i>Geleiras em Risco</div>
-                <ul class="nav-links">
-                    <li><a href="#inicio">Início</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
-                    <li><a href="#causas">Causas</a></li>
-                    <li><a href="#grafico">Gráfico</a></li>
-                    <li><a href="#impactos">Impactos</a></li>
-                    <li><a href="#noticias">Notícias & Vídeos</a></li>
-                    <li><a href="#solucoes">Soluções</a></li>
-                    <li><a href="#equipe">Equipe</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+ <a href="#inicio" class="back-to-top"><i class="fas fa-arrow-up"></i></a>
+ 
+ <header id="header">
+ <div class="container">
+ <nav>
+ <div class="logo"><i class="fas fa-mountain"></i>Geleiras em Risco</div>
+ <ul class="nav-links">
+ <li><a href="#inicio">Início</a></li>
+ <li><a href="#sobre">Sobre</a></li>
+ <li><a href="#causas">Causas</a></li>
+ <li><a href="#grafico">Gráfico</a></li>
+ <li><a href="#impactos">Impactos</a></li>
+ <li><a href="#nasa">NASA</a></li>
+ <li><a href="#noticias">Notícias & Vídeos</a></li>
+ <li><a href="#solucoes">Soluções</a></li>
+ <li><a href="#equipe">Equipe</a></li>
+ <li><a href="#convite">Convite</a></li>
+ </ul>
+ </nav>
+ </div>
+ </header>
 
-    <section id="inicio" class="hero">
-        <video autoplay muted loop playsinline>
-            <source src="/fotos/Trágico ver as Geleiras derretendo na Antártida.mp4" type="video/mp4">
-        </video>
-        <div class="container">
-            <div class="hero-content">
-                <h1>Derretimento das Geleiras: Impacto na Biodiversidade</h1>
-                <p>Um alerta sobre como o desaparecimento das massas de gelo afeta a vida em nosso planeta</p>
-                <a href="#sobre" class="btn">Saiba Mais <i class="fas fa-arrow-down"></i></a>
-            </div>
-        </div>
-    </section>
+ <section id="inicio" class="hero">
+ <video autoplay muted loop playsinline>
+ <source src="/fotos/Trágico ver as Geleiras derretendo na Antártida.mp4" type="video/mp4">
+ Seu navegador não suporta o elemento de vídeo.
+ </video>
+ <div class="container">
+ <div class="hero-content">
+ <h1>Derretimento das Geleiras: Impacto na Biodiversidade</h1>
+ <p>Um alerta sobre como o desaparecimento das massas de gelo afeta a vida em nosso planeta</p>
+ 
+ <!-- Convite adicionado aqui -->
+ <div class="invite-container">
+ <h2 class="invite-title">Junte-se a nós nesta causa urgente!</h2>
+ <p class="invite-text">Explore nosso site para entender as causas, consequências e soluções para o derretimento das geleiras. Sua conscientização é o primeiro passo para a mudança.</p>
+ <div class="btn-group">
+ <a href="#sobre" class="btn">Explorar Agora <i class="fas fa-arrow-down"></i></a>
+ <a href="#solucoes" class="btn btn-secondary">Ver Soluções <i class="fas fa-seedling"></i></a>
+ <a href="#convite" class="btn btn-invite">Visite Nossa Sala! <i class="fas fa-door-open"></i></a>
+ </div>
+ </div>
+ 
+ </div>
+ </div>
+ </section>
 
-    <!-- Sobre -->
-    <section id="sobre" class="about">
-        <div class="container">
-            <h2 class="section-title">O Problema do Derretimento</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>As geleiras são massas de gelo que se formaram ao longo de milhares de anos e desempenham um papel crucial na regulação do clima global e na manutenção dos ecossistemas. Nos últimos decades, temos observado um acelerado derretimento dessas importantes reservas de água doce.</p>
-                    <p>Este fenômeno não é apenas um indicador das mudanças climáticas, mas também uma ameaça direta à biodiversidade do planeta. Espécies que dependem desses habitats estão enfrentando desafios sem precedentes para sua sobrevivência.</p>
-                    <p>Nesta apresentação, exploraremos as causas, consequências e possíveis soluções para este problema crítico que afeta todo o ecossistema terrestre.</p>
-                </div>
-                <div class="about-image">
-                    <img src="fotos/geleiras.webp" alt="Geleira derretendo">
-                </div>
-            </div>
-        </div>
-    </section>
+ <!-- Sobre -->
+ <section id="sobre" class="about">
+ <div class="container">
+ <h2 class="section-title">O Problema do Derretimento</h2>
+ <div class="about-content">
+ <div class="about-text">
+ <p>As geleiras são massas de gelo que se formaram ao longo de milhares de anos e desempenham um papel crucial na regulação do clima global e na manutenção dos ecossistemas. Nos últimos decades, temos observado um acelerado derretimento dessas importantes reservas de água doce.</p>
+ <p>Este fenômeno não é apenas um indicador das mudanças climáticas, mas também uma ameaça direta à biodiversidade do planeta. Espécies que dependem desses habitats estão enfrentando desafios sem precedentes para sua sobrevivência.</p>
+ <p>Nesta apresentação, exploraremos as causas, consequências e possíveis soluções para este problema crítico que afeta todo o ecossistema terrestre.</p>
+ </div>
+ <div class="about-image">
+ <img src="fotos/geleiras.webp" alt="Geleira derretendo">
+ </div>
+ </div>
+ </div>
+ </section>
 
-    <!-- Causas -->
-    <section id="causas" class="causes">
-        <div class="container">
-            <h2 class="section-title">Principais Causas</h2>
-            <div class="causes-grid">
-                <div class="cause-card">
-                    <h3><i class="fas fa-temperature-high"></i> Aquecimento Global</h3>
-                    <p>O aumento da temperatura média do planeta, impulsionado pela concentração de gases de efeito estufa na atmosfera, é a principal causa do derretimento acelerado das geleiras.</p>
-                </div>
-                <div class="cause-card">
-                    <h3><i class="fas fa-smog"></i> Poluição Atmosférica</h3>
-                    <p>Partículas de poluentes depositadas sobre as superfícies geladas reduzem a capacidade de reflexão da luz solar, acelerando o processo de derretimento.</p>
-                </div>
-                <div class="cause-card">
-                    <h3><i class="fas fa-water"></i> Mudanças nas Correntes Oceânicas</h3>
-                    <p>Alterações nos padrões de circulação oceânica levam águas mais quentes para regiões polares, contribuindo para a erosão das geleiras a partir de sua base.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+ <!-- Causas -->
+ <section id="causas" class="causes">
+ <div class="container">
+ <h2 class="section-title">Principais Causas</h2>
+ <div class="causes-grid">
+ <div class="cause-card">
+ <h3><i class="fas fa-temperature-high"></i> Aquecimento Global</h3>
+ <p>O aumento da temperatura média do planeta, impulsionado pela concentração de gases de efeito estufa na atmosfera, é a principal causa do derretimento acelerado das geleiras.</p>
+ </div>
+ <div class="cause-card">
+ <h3><i class="fas fa-smog"></i> Poluição Atmosférica</h3>
+ <p>Partículas de poluentes depositadas sobre as superfícies geladas reducem a capacidade de reflexão da luz solar, acelerando o processo de derretimento.</p>
+ </div>
+ <div class="cause-card">
+ <h3><i class="fas fa-water"></i> Mudanças nas Correntes Oceânicas</h3>
+ <p>Alterações nos padrões de circulação oceânica levam águas mais quentes para regiões polares, contribuindo para a erosão das geleiras a partir de sua base.</p>
+ </div>
+ </div>
+ </div>
+ </section>
 
-    <!-- Gráfico -->
-    <section id="grafico" class="chart-section">
-        <div class="container">
-            <h2 class="section-title">Comparação do Derretimento</h2>
-            <div class="chart-container">
-                <h3 class="chart-title">Redução das Geleiras ao Longo do Tempo</h3>
-                <canvas id="glacierChart"></canvas>
-            </div>
-        </div>
-    </section>
+ <!-- Gráfico -->
+ <section id="grafico" class="chart-section">
+ <div class="container">
+ <h2 class="section-title">Comparação do Derretimento</h2>
+ <div class="chart-container">
+ <h3 class="chart-title">Redução das Geleiras ao Longo do Tempo</h3>
+ <canvas id="glacierChart"></canvas>
+ </div>
+ </div>
+ </section>
 
-    <!-- Impactos -->
-    <section id="impactos" class="impacts">
-        <div class="container">
-            <h2 class="section-title">Impactos na Biodiversidade</h2>
-            <div class="impact-grid">
-                <div class="impact-card">
-                    <div class="impact-image">
-                        <img src="fotos/calotas polares - C.E.webp" alt="Urso polar">
-                    </div>
-                    <div class="impact-content">
-                        <h3>Espécies Polares Ameaçadas</h3>
-                        <p>Animais como ursos polares, focas e pinguins perdem seus habitats e fontes de alimento com o desaparecimento do gelo marinho.</p>
-                    </div>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-image">
-                        <img src="fotos/nivel-do-mar-1741961756531_v2_1x1.jpg" alt="Aumento do nível do mar">
-                    </div>
-                    <div class="impact-content">
-                        <h3>Elevação do Nível do Mar</h3>
-                        <p>O derretimento contribui para a elevação dos oceans, ameaçando ecossistemas costeiros e comunidades humanas.</p>
-                    </div>
-                </div>
-                <div class="impact-card">
-                    <div class="impact-image">
-                        <img src="https://source.unsplash.com/400x300/?algae-bloom" alt="Floração de algas">
-                    </div>
-                    <div class="impact-content">
-                        <h3>Alterações nas Correntes Marinhas</h3>
-                        <p>A água doce proveniente do derretimento altera a salinidade e a temperatura dos oceanos, afetando ecossistemas marinhos.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+ <!-- Impactos -->
+ <section id="impactos" class="impacts">
+ <div class="container">
+ <h2 class="section-title">Impactos na Biodiversidade</h2>
+ <div class="impact-grid">
+ <div class="impact-card">
+ <div class="impact-image">
+ <img src="fotos/calotas polares - C.E.webp" alt="Urso polar">
+ </div>
+ <div class="impact-content">
+ <h3>Espécies Polares Ameaçadas</h3>
+ <p>Animais como ursos polares, focas và pinguins perdem seus habitats e fontes de alimento com o desaparecimento do gelo marinho.</p>
+ </div>
+ </div>
+ <div class="impact-card">
+ <div class="impact-image">
+ <img src="fotos/nivel-do-mar-1741961756531_v2_1x1.jpg" alt="Aumento do nível do mar">
+ </div>
+ <div class="impact-content">
+ <h3>Elevação do Nível do Mar</h3>
+ <p>O derretimento contribui para a elevação dos oceans, ameaçando ecossistemas costeiros e comunidades humanas.</p>
+ </div>
+ </div>
+ <div class="impact-card">
+ <div class="impact-image">
+ <img src="https://img.freepik.com/fotos-premium/eutrofizacao-e-floracao-de-algas-no-lago_1169976-40.jpg" alt="Floração de algas">
+ </div>
+ <div class="impact-content">
+ <h3>Alterações nas Correntes Marinhas</h3>
+ <p>A água doce proveniente do derretimento altera a salinidade e a temperatura dos oceanos, afetando ecossistemas marinhos.</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
 
-    <!-- Notícias e Vídeos -->
-    <section id="noticias" class="news-section">
-        <div class="container">
-            <h2 class="section-title">Notícias e Vídeos</h2>
-            <div class="tabs-container">
-                <div class="tabs-header">
-                    <button class="tab-btn active" data-tab="noticias-tab">
-                        <i class="fas fa-newspaper"></i> Notícias
-                    </button>
-                    <button class="tab-btn" data-tab="videos-tab">
-                        <i class="fas fa-play-circle"></i> Vídeos
-                    </button>
-                </div>
-                
-                <div class="tab-content active" id="noticias-tab">
-                    <div class="news-grid">
-                        <div class="news-card">
-                            <div class="news-image">
-                                <img src="https://source.unsplash.com/400x200/?glacier-news-1" alt="Notícia sobre geleiras">
-                            </div>
-                            <div class="news-content">
-                                <div class="news-date">15 de Maio, 2023</div>
-                                <h3 class="news-title">Geleiras dos Alpes diminuíram 50% em menos de 100 anos</h3>
-                                <p class="news-excerpt">Estudo revela que as geleiras alpinas perderam metade de seu volume desde o início do século XX...</p>
-                            </div>
-                        </div>
-                        
-                        <div class="news-card">
-                            <div class="news-image">
-                                <img src="https://source.unsplash.com/400x200/?glacier-news-2" alt="Notícia sobre geleiras">
-                            </div>
-                            <div class="news-content">
-                                <div class="news-date">2 de Abril, 2023</div>
-                                <h3 class="news-title">Antártida perde área de gelo equivalente ao território brasileiro</h3>
-                                <p class="news-excerpt">Pesquisadores alertam para o acelerado derretimento das camadas de gelo na Antártida Ocidental...</p>
-                            </div>
-                        </div>
-                        
-                        <div class="news-card">
-                            <div class="news-image">
-                                <img src="https://source.unsplash.com/400x200/?glacier-news-3" alt="Notícia sobre geleiras">
-                            </div>
-                            <div class="news-content">
-                                <div class="news-date">20 de Março, 2023</div>
-                                <h3 class="news-title">Groelândia perde 30 milhões de toneladas de gelo por hora</h3>
-                                <p class="news-excerpt">Novas medições por satélite mostram que a taxa de derretimento na Groenlândia aumentou 20% na última década...</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="tab-content" id="videos-tab">
-                    <div class="videos-grid">
-                        <div class="video-card">
-                            <div class="video-thumbnail">
-                                <img src="https://source.unsplash.com/400x200/?glacier-video-1" alt="Vídeo sobre geleiras">
-                                <div class="play-btn">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="video-content">
-                                <h3 class="video-title">Expedição à Geleira Thwaites</h3>
-                                <p class="video-desc">Documentário sobre a expedição científica à geleira mais vulnerável da Antártida.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="video-card">
-                            <div class="video-thumbnail">
-                                <img src="https://source.unsplash.com/400x200/?glacier-video-2" alt="Vídeo sobre geleiras">
-                                <div class="play-btn">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="video-content">
-                                <h3 class="video-title">O Impacto do Derretimento nos Oceanos</h3>
-                                <p class="video-desc">Como o degelo das calotas polares está afetando a circulação oceânica global.</p>
-                            </div>
-                        </div>
-                        
-                        <div class="video-card">
-                            <div class="video-thumbnail">
-                                <img src="https://source.unsplash.com/400x200/?glacier-video-3" alt="Vídeo sobre geleiras">
-                                <div class="play-btn">
-                                    <i class="fas fa-play"></i>
-                                </div>
-                            </div>
-                            <div class="video-content">
-                                <h3 class="video-title">Tecnologias para Monitoramento de Geleiras</h3>
-                                <p class="video-desc">Conheça as inovações tecnológicas que estão ajudando a monitorar o derretimento glacial.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+ <!-- NASA Section -->
+ <section id="nasa" class="nasa-section">
+ <div class="container">
+ <h2 class="section-title">Mais Informações da NASA</h2>
+ <div class="nasa-content">
+ <div class="nasa-logo">
+ <i class="fas fa-globe-americas"></i>
+ </div>
+ <p>Para informações científicas detalhadas e dados atualizados sobre o derretimento das geleiras e camadas de gelo, visite o portal oficial da NASA:</p>
+ <a href="https://vesl.jpl.nasa.gov/ice-sheets/giscui/" target="_blank" class="btn btn-nasa">
+ Acessar Dados da NASA <i class="fas fa-external-link-alt"></i>
+ </a>
+ <p class="invite-text" style="margin-top: 20px;">O Visualização de Camadas de Gelo da NASA (GISCUI) fornece dados essenciais para entender as mudanças nas regiões polares e seu impacto global.</p>
+ </div>
+ </div>
+ </section>
 
-    <!-- Soluções -->
-    <section id="solucoes" class="solutions">
-        <div class="container">
-            <h2 class="section-title">Possíveis Soluções</h2>
-            <div class="solutions-content">
-                <div class="solution-item">
-                    <div class="solution-icon"><i class="fas fa-industry"></i></div>
-                    <div>
-                        <h3>Redução de Emissões</h3>
-                        <p>Diminuir drasticamente a queima de combustíveis fósseis e investir em energias renováveis é fundamental para frear o aquecimento global.</p>
-                    </div>
-                </div>
-                <div class="solution-item">
-                    <div class="solution-icon"><i class="fas fa-tree"></i></div>
-                    <div>
-                        <h3>Conservação de Ecossistemas</h3>
-                        <p>Proteger áreas naturais e criar corredores ecológicos ajuda espécies a se adaptarem às mudanças em seus habitats.</p>
-                    </div>
-                </div>
-                <div class="solution-item">
-                    <div class="solution-icon"><i class="fas fa-landmark"></i></div>
-                    <div>
-                        <h3>Políticas Públicas</h3>
-                        <p>Governos devem implementar políticas ambientais rigorosas e acordos internacionais para enfrentar o problema globalmente.</p>
-                    </div>
-                </div>
-                <div class="solution-item">
-                    <div class="solution-icon"><i class="fas fa-book"></i></div>
-                    <div>
-                        <h3>Conscientização e Educação</h3>
-                        <p>Informar a população sobre a gravidade do problema é essencial para promover mudanças de comportamento e pressionar por ações.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+ <!-- Notícias e Vídeos -->
+ <section id="noticias" class="news-section">
+ <div class="container">
+ <h2 class="section-title">Notícias e Vídeos</h2>
+ <div class="tabs-container">
+ <div class="tabs-header">
+ <button class="tab-btn active" data-tab="noticias-tab">
+ <i class="fas fa-newspaper"></i> Notícias
+ </button>
+ <button class="tab-btn" data-tab="videos-tab">
+ <i class="fas fa-play-circle"></i> Vídeos
+ </button>
+ </div>
+ 
+ <div class="tab-content active" id="noticias-tab">
+ <div class="news-grid">
+ <div class="news-card">
+ <div class="news-image">
+ <img src="https://source.unsplash.com/400x200/?glacier-news-1" alt="Notícia sobre geleiras">
+ </div>
+ <div class="news-content">
+ <div class="news-date">15 de Maio, 2023</div>
+ <h3 class="news-title">Geleiras dos Alpes diminuíram 50% em menos de 100 anos</h3>
+ <p class="news-excerpt">Estudo revela que as geleiras alpinas perderam metade de seu volume desde o início do século XX...</p>
+ </div>
+ </div>
+ 
+ <div class="news-card">
+ <div class="news-image">
+ <img src="https://source.unsplash.com/400x200/?glacier-news-2" alt="Notícia sobre geleiras">
+ </div>
+ <div class="news-content">
+ <div class="news-date">2 de Abril, 2023</div>
+ <h3 class="news-title">Antártida perde área de gelo equivalente ao território brasileiro</h3>
+ <p class="news-excerpt">Pesquisadores alertam para o acelerado derretimento das camadas de gelo na Antártida Ocidental...</p>
+ </div>
+ </div>
+ 
+ <div class="news-card">
+ <div class="news-image">
+ <img src="https://source.unsplash.com/400x200/?glacier-news-3" alt="Notícia sobre geleiras">
+ </div>
+ <div class="news-content">
+ <div class="news-date">20 de Março, 2023</div>
+ <h3 class="news-title">Groenlândia perde 30 milhões de toneladas de gelo por hora</h3>
+ <p class="news-excerpt">Novas medições por satélite mostram que a taxa de derretimento na Groenlândia aumentou 20% na última década...</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ 
+ <div class="tab-content" id="videos-tab">
+ <div class="videos-grid">
+ <div class="video-card">
+ <div class="video-thumbnail">
+ <img src="https://source.unsplash.com/400x200/?glacier-video-1" alt="Vídeo sobre geleiras">
+ <div class="play-btn">
+ <i class="fas fa-play"></i>
+ </div>
+ </div>
+ <div class="video-content">
+ <h3 class="video-title">Expedição à Geleira Thwaites</h3>
+ <p class="video-desc">Documentário sobre a expedição científica à geleira mais vulnerável da Antártida.</p>
+ </div>
+ </div>
+ 
+ <div class="video-card">
+ <div class="video-thumbnail">
+ <img src="https://source.unsplash.com/400x200/?glacier-video-2" alt="Vídeo sobre geleiras">
+ <div class="play-btn">
+ <i class="fas fa-play"></i>
+ </div>
+ </div>
+ <div class="video-content">
+ <h3 class="video-title">O Impacto do Derretimento nos Oceans</h3>
+ <p class="video-desc">Como o degelo das calotas polares está afetando a circulação oceânica global.</p>
+ </div>
+ </div>
+ 
+ <div class="video-card">
+ <div class="video-thumbnail">
+ <img src="https://source.unsplash.com/400x200/?glacier-video-3" alt="Vídeo sobre geleiras">
+ <div class="play-btn">
+ <i class="fas fa-play"></i>
+ </div>
+ </div>
+ <div class="video-content">
+ <h3 class="video-title">Tecnologias para Monitoramento de Geleiras</h3>
+ <p class="video-desc">Conheça as inovações tecnológicas que estão ajudando a monitorar o derretimento glacial.</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
 
-    <!-- Galeria -->
-    <section class="gallery">
-        <div class="container">
-            <h2 class="section-title">Registros do Derretimento</h2>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="https://source.unsplash.com/300x300/?glacier-comparison" alt="Comparação de geleiras">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://source.unsplash.com/300x300/?arctic-wildlife" alt="Vida selvagem no Ártico">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://source.unsplash.com/300x300/?iceberg" alt="Iceberg">
-                </div>
-                <div class="gallery-item">
-                    <img src="https://source.unsplash.com/300x300/?glacier-crack" alt="Rachadura em geleira">
-                </div>
-            </div>
-        </div>
-    </section>
+ <!-- Soluções -->
+ <section id="solucoes" class="solutions">
+ <div class="container">
+ <h2 class="section-title">Possíveis Soluções</h2>
+ <div class="solutions-content">
+ <div class="solution-item">
+ <div class="solution-icon"><i class="fas fa-industry"></i></div>
+ <div>
+ <h3>Redução de Emissões</h3>
+ <p>Diminuir drasticamente a queima de combustíveis fósseis e investir em energias renováveis é fundamental para frear o aquecimento global.</p>
+ </div>
+ </div>
+ <div class="solution-item">
+ <div class="solution-icon"><i class="fas fa-tree"></i></div>
+ <div>
+ <h3>Conservação de Ecossistemas</h3>
+ <p>Proteger áreas naturais e criar corredores ecológicos ajuda espécies a se adaptarem às mudanças em seus habitats.</p>
+ </div>
+ </div>
+ <div class="solution-item">
+ <div class="solution-icon"><i class="fas fa-landmark"></i></div>
+ <div>
+ <h3>Políticas Públicas</h3>
+ <p>Governos devem implementar políticas ambientais rigorosas e acordos internacionais para enfrentar o problema globalmente.</p>
+ </div>
+ </div>
+ <div class="solution-item">
+ <div class="solution-icon"><i class="fas fa-book"></i></div>
+ <div>
+ <h3>Conscientização e Educação</h3>
+ <p>Informar a população sobre a gravidade do problema é essencial para promover mudanças de comportamento e pressionar por ações.</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+ <!-- Equipe -->
+ <section id="equipe" class="team">
+ <div class="container">
+ <h2 class="section-title">Nossa Equipe de Desenvolvimento</h2>
+ <div class="team-grid">
+ <div class="team-member">
+ <img src="fotos/197547384.png" alt="Membro da equipe">
+ <h3>Enzo Moretti</h3>
+ <p>Pesquisador Principal</p>
+ </div>
+ <div class="team-member">
+ <img src="fotos/Screenshot 2025-09-15 08.31.57.png" alt="Membro da equipe">
+ <h3>Gabriel Henrique</h3 "style color: white">
+ <p>Desenvolvedor do site</p>
+ </div>
+ <div class="team-member">
+ <img src="fotos/Screenshot 2025-09-15 08.27.11.png" alt="Membro da equipe">
+ <h3>Igor Jesus</h3>
+ <p>Dsenvolvedor do site</p>
+ </div>
+ </div>
+ </div>
+ </section>
 
-    <!-- Equipe -->
-    <section id="equipe" class="team">
-        <div class="container">
-            <h2 class="section-title">Nossa Equipe</h2>
-            <div class="team-grid">
-                <div class="team-member">
-                    <img src="https://source.unsplash.com/150x150/?student-1" alt="Membro da equipe">
-                    <h3>Ana Silva</h3>
-                    <p>Pesquisadora Principal</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <img src="https://source.unsplash.com/150x150/?student-2" alt="Membro da equipe">
-                    <h3>Carlos Oliveira</h3>
-                    <p>Analista de Dados</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <img src="https://source.unsplash.com/150x150/?student-3" alt="Membro da equipe">
-                    <h3>Mariana Santos</h3>
-                    <p>Especialista em Biodiversidade</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <img src="https://source.unsplash.com/150x150/?student-4" alt="Membro da equipe">
-                    <h3>Pedro Almeida</h3>
-                    <p>Comunicação e Design</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+ <!-- Convite para a sala de aula -->
+ <section id="convite" class="classroom-invite">
+ <div class="container">
+ <h2 class="section-title">Visite Nossa Sala de Aula!</h2>
+ <div class="invite-content">
+ <p>Gostaríamos de convidar todos para conhecer nosso espaço de trabalho e ver de perto nosso projeto sobre o derretimento das geleiras e seu impacto na biodiversidade.</p>
+ <p>Teremos maquetes, exposições interativas e estaremos disponíveis para explicar cada parte do nosso trabalho e responder perguntas.</p>
+ 
+ <div class="invite-details">
+ <div class="invite-detail">
+ <i class="fas fa-calendar-alt"></i>
+ <h3>Data</h3>
+ <p>15 de Novembro de 2023</p>
+ </div>
+ <div class="invite-detail">
+ <i class="fas fa-clock"></i>
+ <h3>Horário</h3>
+ <p>14h às 17h</p>
+ </div>
+ <div class="invite-detail">
+ <i class="fas fa-map-marker-alt"></i>
+ <h3>Local</h3>
+ <p>Sala 203 - 2º Ano B</p>
+ </div>
+ </div>
+ 
+ <p>Contamos com sua presença para compartilhar esse momento especial conosco!</p>
+ <a href="#" class="btn btn-invite">Confirmar Presença <i class="fas fa-check-circle"></i></a>
+ </div>
+ </div>
+ </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <h3>Geleiras em Risco - Impacto na Biodiversidade</h3>
-                <p>Trabalho de apresentação do 2º ano do Ensino Médio</p>
-                
-                <div class="footer-social">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-youtube"></i></a>
-                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                </div>
-                
-                <ul class="footer-links">
-                    <li><a href="#inicio">Início</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
-                    <li><a href="#causas">Causas</a></li>
-                    <li><a href="#grafico">Gráfico</a></li>
-                    <li><a href="#impactos">Impactos</a></li>
-                    <li><a href="#solucoes">Soluções</a></li>
-                    <li><a href="#equipe">Equipe</a></li>
-                </ul>
-                <p>© 2025 - Todos os direitos reservados</p>
-            </div>
-        </div>
-    </footer>
+ <!-- Footer -->
+ <footer>
+ <div class="container">
+ <div class="footer-content">
+ <h3>Geleiras em Risco - Impacto na Biodiversidade</h3>
+ <p>Trabalho de apresentação do 2º ano do Ensino Médio</p>
+ 
+ <ul class="footer-links">
+ <li><a href="#inicio">Início</a></li>
+ <li><a href="#sobre">Sobre</a></li>
+ <li><a href="#causas">Causas</a></li>
+ <li><a href="#grafico">Gráfico</a></li>
+ <li><a href="#impactos">Impactos</a></li>
+ <li><a href="#nasa">NASA</a></li>
+ <li><a href="#solucoes">Soluções</a></li>
+ <li><a href="#equipe">Equipe</a></li>
+ <li><a href="#convite">Convite</a></li>
+ </ul>
+ <p>© 2025 - Todos os direitos reservados</p>
+ </div>
+ </div>
+ </footer>
 
-    <script>
-        // Configuração do gráfico
-        document.addEventListener('DOMContentLoaded', function() {
-            const ctx = document.getElementById('glacierChart').getContext('2d');
-            const glacierChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['1900', '1950', '2000', '2020', '2023'],
-                    datasets: [
-                        {
-                            label: 'Extensão das Geleiras (km²)',
-                            data: [100, 85, 60, 40, 35],
-                            backgroundColor: [
-                                'rgba(54, 162, 235, 0.7)',
-                                'rgba(54, 162, 235, 0.7)',
-                                'rgba(54, 162, 235, 0.7)',
-                                'rgba(255, 99, 132, 0.7)',
-                                'rgba(255, 99, 132, 0.7)'
-                            ],
-                            borderColor: [
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 99, 132, 1)',
-                                'rgba(255, 99, 132, 1)'
-                            ],
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            title: {
-                                display: true,
-                                text: 'Extensão Relativa (%)'
-                            }
-                        },
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Ano'
-                            }
-                        }
-                    },
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Redução das Geleiras ao Longo dos Anos'
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `Extensão: ${context.raw}% da original`;
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Botão voltar ao topo
-            const backToTopButton = document.querySelector('.back-to-top');
-            
-            window.addEventListener('scroll', () => {
-                if (window.pageYOffset > 300) {
-                    backToTopButton.classList.add('visible');
-                } else {
-                    backToTopButton.classList.remove('visible');
-                }
-                
-                // Header menor ao rolar
-                const header = document.getElementById('header');
-                if (window.pageYOffset > 100) {
-                    header.classList.add('scrolled');
-                } else {
-                    header.classList.remove('scrolled');
-                }
-            });
-            
-            backToTopButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-            
-            // Animação de elementos ao rolar
-            const animateOnScroll = function() {
-                const elements = document.querySelectorAll('.cause-card, .impact-card, .solution-item, .team-member');
-                
-                elements.forEach(element => {
-                    const elementPosition = element.getBoundingClientRect().top;
-                    const screenPosition = window.innerHeight / 1.3;
-                    
-                    if (elementPosition < screenPosition) {
-                        element.style.opacity = 1;
-                        element.style.transform = 'translateY(0)';
-                    }
-                });
-            };
-            
-            // Inicializar opacidade para elementos animados
-            document.querySelectorAll('.cause-card, .impact-card, .solution-item, .team-member').forEach(element => {
-                element.style.opacity = 0;
-                element.style.transform = 'translateY(20px)';
-                element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            });
-            
-            window.addEventListener('scroll', animateOnScroll);
-            // Disparar uma vez ao carregar a página
-            window.addEventListener('load', animateOnScroll);
-        });
-    </script>
+ <script>
+ // Configuração do gráfico
+ document.addEventListener('DOMContentLoaded', function() {
+ const ctx = document.getElementById('glacierChart').getContext('2d');
+ const glacierChart = new Chart(ctx, {
+ type: 'bar',
+ data: {
+ labels: ['1900', '1950', '2000', '2020', '2023'],
+ datasets: [
+ {
+ label: 'Extensão das Geleiras (km²)',
+ data: [100, 85, 60, 40, 35],
+ backgroundColor: [
+ 'rgba(54, 162, 235, 0.7)',
+ 'rgba(54, 162, 235, 0.7)',
+ 'rgba(54, 162, 235, 0.7)',
+ 'rgba(255, 99, 132, 0.7)',
+ 'rgba(255, 99, 132, 0.7)'
+ ],
+ borderColor: [
+ 'rgba(54, 162, 235, 1)',
+ 'rgba(54, 162, 235, 1)',
+ 'rgba(54, 162, 235, 1)',
+ 'rgba(255, 99, 132, 1)',
+ 'rgba(255, 99, 132, 1)'
+ ],
+ borderWidth: 1
+ }
+ ]
+ },
+ options: {
+ responsive: true,
+ scales: {
+ y: {
+ beginAtZero: true,
+ title: {
+ display: true,
+ text: 'Extensão Relativa (%)'
+ }
+ },
+ x: {
+ title: {
+ display: true,
+ text: 'Ano'
+ }
+ }
+ },
+ plugins: {
+ title: {
+ display: true,
+ text: 'Redução das Geleiras ao Longo dos Anos'
+ },
+ tooltip: {
+ callbacks: {
+ label: function(context) {
+ return `Extensão: ${context.raw}% da original`;
+ }
+ }
+ }
+ }
+ }
+ });
+ 
+ // Botão voltar ao topo
+ const backToTopButton = document.querySelector('.back-to-top');
+ 
+ window.addEventListener('scroll', () => {
+ if (window.pageYOffset > 300) {
+ backToTopButton.classList.add('visible');
+ } else {
+ backToTopButton.classList.remove('visible');
+ }
+ 
+ // Header menor ao rolar
+ const header = document.getElementById('header');
+ if (window.pageYOffset > 100) {
+ header.classList.add('scrolled');
+ } else {
+ header.classList.remove('scrolled');
+ }
+ });
+ 
+ backToTopButton.addEventListener('click', (e) => {
+ e.preventDefault();
+ window.scrollTo({ top: 0, behavior: 'smooth' });
+ });
+ 
+ // Animação de elementos ao rolar
+ const animateOnScroll = function() {
+ const elements = document.querySelectorAll('.cause-card, .impact-card, .solution-item, .team-member');
+ 
+ elements.forEach(element => {
+ const elementPosition = element.getBoundingClientRect().top;
+ const screenPosition = window.innerHeight / 1.3;
+ 
+ if (elementPosition < screenPosition) {
+ element.style.opacity = 1;
+ element.style.transform = 'translateY(0)';
+ }
+ });
+ };
+ 
+ // Inicializar opacidade para elementos animados
+ document.querySelectorAll('.cause-card, .impact-card, .solution-item, .team-member').forEach(element => {
+ element.style.opacity = 0;
+ element.style.transform = 'translateY(20px)';
+ element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+ });
+ 
+ window.addEventListener('scroll', animateOnScroll);
+ // Disparar uma vez ao carregar a página
+ window.addEventListener('load', animateOnScroll);
+ 
+ // Funcionalidade das abas
+ const tabBtns = document.querySelectorAll('.tab-btn');
+ const tabContents = document.querySelectorAll('.tab-content');
+ 
+ tabBtns.forEach(btn => {
+ btn.addEventListener('click', () => {
+ const tabId = btn.getAttribute('data-tab');
+ 
+ // Remover classe ativa de todos os botões e conteúdos
+ tabBtns.forEach(b => b.classList.remove('active'));
+ tabContents.forEach(c => c.classList.remove('active'));
+ 
+ // Adicionar classe ativa ao botão clicado e ao conteúdo correspondente
+ btn.classList.add('active');
+ document.getElementById(tabId).classList.add('active');
+ });
+ });
+ });
+ </script>
 </body>
-</html> 
+</html>
